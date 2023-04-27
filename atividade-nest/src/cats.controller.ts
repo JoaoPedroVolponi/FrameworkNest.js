@@ -29,20 +29,48 @@
 //   }
 // }
 
-import { Controller, Get, Post, Res, HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
+// import { Controller, Get, Post, Res, HttpStatus } from '@nestjs/common';
+// import { Response } from 'express';
+
+// @Controller('cats')
+// export class CatsController {
+  
+//   @Post()
+//   create(@Res() res: Response) {
+//     res.status(HttpStatus.CREATED).send();
+//   }
+
+//   @Get()
+//   findAll(@Res({ passthrough: true }) res: Response) {
+//   res.status(HttpStatus.OK);
+//   return [];
+//   }
+// }
+
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { CatsService } from './cats.service';
+import { Cat } from './interfaces/cat.interface';
 
 @Controller('cats')
 export class CatsController {
-  
+  constructor(private catsService: CatsService) {}
+
   @Post()
-  create(@Res() res: Response) {
-    res.status(HttpStatus.CREATED).send();
+  async create(@Body() createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto);
   }
 
+
+  @Post()
+  async create1(@Body() createCatDto: CreateCatDto) {
+  return 'This action adds a new cat';
+}
+
   @Get()
-  findAll(@Res({ passthrough: true }) res: Response) {
-  res.status(HttpStatus.OK);
-  return [];
+  async findAll(): Promise<Cat[]> {
+    return this.catsService.findAll();
   }
+
+
 }
